@@ -25,6 +25,7 @@ requirements:
   run:
     - python
     - requests
+    - authlib
     - pyopenssl >=0.14
     - cryptography >=1.3.4
     - idna >=2.0.0
