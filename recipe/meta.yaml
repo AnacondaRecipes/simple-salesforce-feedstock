@@ -1,6 +1,6 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.11.2" %}
-{% set sha256sum = "995cf718bb240617b4c02c39c2c20288582916b11b06e7ebb6fb360729ee439b" %}
+{% set version = "1.11.4" %}
+{% set sha256sum = "3768fe40d04daa74409acccd9934fcf833697c6b239d9bf52d7f87a99efbe41e" %}
 
 package:
   name: {{ name }}
