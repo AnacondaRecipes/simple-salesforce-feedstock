@@ -18,14 +18,18 @@ build:
 requirements:
   host:
     - pip
-    - python >=3.5
+    - python
     - setuptools
     - wheel
 
   run:
-    - python >=3.5
+    - python
     - requests >=2.22.0
-    - authlib
+    - cryptography
+    - zeep
+    - pyjwt
+    - more-itertools
+    - pendulum
 
 test:
   imports:
