@@ -13,8 +13,8 @@ source:
 
 build:
   noarch: python
-  script: python -m pip install --no-deps --ignore-installed .
-  number: 1
+  script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
+  number: 0
 
 requirements:
   host:
