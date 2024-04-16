@@ -1,6 +1,6 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.11.2" %}
-{% set sha256sum = "995cf718bb240617b4c02c39c2c20288582916b11b06e7ebb6fb360729ee439b" %}
+{% set version = "1.12.5" %}
+{% set sha256sum = "ef65f72438e3b215619f6835d3d4356e147adf3a7ece6896d239127dd6aefcd1" %}
 
 package:
   name: {{ name }}
@@ -12,21 +12,25 @@ source:
   sha256: {{ sha256sum }}
 
 build:
-  noarch: python
-  script: python -m pip install --no-deps --ignore-installed .
-  number: 1
+  script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
+  number: 0
+  skip: True  # [s390x]
 
 requirements:
   host:
     - pip
-    - python >=3.5
+    - python
     - setuptools
     - wheel
 
   run:
-    - python >=3.5
+    - python
     - requests >=2.22.0
-    - authlib
+    - cryptography
+    - zeep
+    - pyjwt
+    - more-itertools
+    - pendulum
 
 test:
   imports:
@@ -44,7 +48,7 @@ about:
   license: Apache-2.0
   license_family: Apache
   license_file: '{{ environ['RECIPE_DIR'] }}/LICENSE.txt'
-
+  doc_url: https://simple-salesforce.readthedocs.io/
 
 extra:
   recipe-maintainers:
