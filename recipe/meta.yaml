@@ -1,5 +1,5 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.12.5" %}
+{% set version = "1.12.9" %}
 {% set sha256sum = "ef65f72438e3b215619f6835d3d4356e147adf3a7ece6896d239127dd6aefcd1" %}
 
 package:
@@ -8,21 +8,19 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256sum }}
+  url: https://pypi.org/packages/source/s/simple-salesforce/simple_salesforce-1.12.9.tar.gz
+  sha256: 86d63c43cf6581847284f2538fd8b17aaea0727c63a947267759f7f242a4ef8e
 
 build:
   script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
   number: 0
-  skip: True  # [s390x]
+  skip: true  # [s390x]
 
 requirements:
   host:
     - pip
     - python
-    - setuptools
-    - wheel
-
+    - setuptools >=61.0
   run:
     - python
     - requests >=2.22.0
@@ -31,6 +29,7 @@ requirements:
     - pyjwt
     - more-itertools
     - pendulum
+    - typing_extensions
 
 test:
   imports:
@@ -43,11 +42,11 @@ test:
 about:
   home: https://github.com/simple-salesforce/simple-salesforce
   dev_url: https://github.com/simple-salesforce/simple-salesforce
-  description: 'A very simple Salesforce.com REST API client for Python'
-  summary: 'Simple Salesforce is a basic Salesforce.com REST API client. The goal is to provide a very low-level interface to the API, returning an ordered dictionary of the API JSON response.'
+  description: A very simple Salesforce.com REST API client for Python
+  summary: Simple Salesforce is a basic Salesforce.com REST API client. The goal is to provide a very low-level interface to the API, returning an ordered dictionary of the API JSON response.
   license: Apache-2.0
   license_family: Apache
-  license_file: '{{ environ['RECIPE_DIR'] }}/LICENSE.txt'
+  license_file: {{ environ['RECIPE_DIR'] }}/LICENSE.txt
   doc_url: https://simple-salesforce.readthedocs.io/
 
 extra:
