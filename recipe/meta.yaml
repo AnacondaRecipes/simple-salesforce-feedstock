@@ -33,6 +33,12 @@ requirements:
 # E TypeError: auth_message must be a string
 {% set deselect_tests = " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_connected_app_login_failure" %}
 {% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_token_login_failure" %}
+# E PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_failed_record_results" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_unprocessed_record_results" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_hard_delete" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_insert" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_upsert" %}  # [win]
 test:
   source_files:
     # pyargs does not work, tests removed from site-package dir.
