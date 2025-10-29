@@ -1,44 +1,59 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.12.5" %}
-{% set sha256sum = "ef65f72438e3b215619f6835d3d4356e147adf3a7ece6896d239127dd6aefcd1" %}
+{% set version = "1.12.9" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256sum }}
+  url: https://github.com/{{ name }}/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 637c9c3a3c905ff20e28a4042e47ed25b592eef19f4a97f43567928f9dfe6849
 
 build:
-  script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
   number: 0
-  skip: True  # [s390x]
+  script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
+  skip: True  # [py<39]
 
 requirements:
   host:
     - pip
     - python
-    - setuptools
+    - setuptools >=61.0
     - wheel
 
   run:
     - python
     - requests >=2.22.0
-    - cryptography
+    - typing-extensions
     - zeep
     - pyjwt
     - more-itertools
-    - pendulum
 
+# > raise TypeError("auth_message must be a string")
+# E TypeError: auth_message must be a string
+{% set deselect_tests = " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_connected_app_login_failure" %}
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_token_login_failure" %}
+# E PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_failed_record_results" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_unprocessed_record_results" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_hard_delete" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_insert" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_upsert" %}  # [win]
 test:
+  source_files:
+    # pyargs does not work, tests removed from site-package dir.
+    - simple_salesforce
   imports:
     - simple_salesforce
-  requires:
-    - pip
   commands:
     - pip check
+
+    - pytest -v simple_salesforce/tests {{ deselect_tests }}
+  requires:
+    - pip
+    - pytest
+    - responses >=0.5.1
+    - cryptography >4.0.0
 
 about:
   home: https://github.com/simple-salesforce/simple-salesforce
@@ -47,8 +62,8 @@ about:
   summary: 'Simple Salesforce is a basic Salesforce.com REST API client. The goal is to provide a very low-level interface to the API, returning an ordered dictionary of the API JSON response.'
   license: Apache-2.0
   license_family: Apache
-  license_file: '{{ environ['RECIPE_DIR'] }}/LICENSE.txt'
-  doc_url: https://simple-salesforce.readthedocs.io/
+  license_file: LICENSE.txt
+  doc_url: https://simple-salesforce.readthedocs.io
 
 extra:
   recipe-maintainers:
