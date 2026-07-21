@@ -1,26 +1,34 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.12.9" %}
+{% set version = "1.12.10" %}
+{% set deselect_tests = " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_connected_app_login_failure" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_token_login_failure"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_failed_record_results"' %}  # [win]
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_unprocessed_record_results"' %}  # [win]
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_hard_delete"' %}  # [win]
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_insert"' %}  # [win]
+{% set deselect_tests = 'deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_upsert"' %}  # [win]
 
+# > raise TypeError("auth_message must be a string")
+# E TypeError: auth_message must be a string
+# E PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 637c9c3a3c905ff20e28a4042e47ed25b592eef19f4a97f43567928f9dfe6849
+  sha256: e3cb171c8369503843c994b0b6209c405c5678bb90be00f01ea9561466de49a2
 
 build:
   number: 0
   script: python -m pip install --no-deps --ignore-installed . --no-build-isolation
-  skip: True  # [py<39]
+  skip: true  # [py<39]
 
 requirements:
   host:
     - pip
     - python
     - setuptools >=61.0
-    - wheel
-
   run:
     - python
     - requests >=2.22.0
@@ -28,17 +36,8 @@ requirements:
     - zeep
     - pyjwt
     - more-itertools
+    - typing_extensions
 
-# > raise TypeError("auth_message must be a string")
-# E TypeError: auth_message must be a string
-{% set deselect_tests = " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_connected_app_login_failure" %}
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_login.py::TestSalesforceLogin::test_token_login_failure" %}
-# E PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_failed_record_results" %}  # [win]
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_get_unprocessed_record_results" %}  # [win]
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_hard_delete" %}  # [win]
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_insert" %}  # [win]
-{% set deselect_tests = deselect_tests + " --deselect=simple_salesforce/tests/test_bulk2.py::TestSFBulk2Type::test_upsert" %}  # [win]
 test:
   source_files:
     # pyargs does not work, tests removed from site-package dir.
@@ -47,7 +46,6 @@ test:
     - simple_salesforce
   commands:
     - pip check
-
     - pytest -v simple_salesforce/tests {{ deselect_tests }}
   requires:
     - pip
@@ -58,8 +56,8 @@ test:
 about:
   home: https://github.com/simple-salesforce/simple-salesforce
   dev_url: https://github.com/simple-salesforce/simple-salesforce
-  description: 'A very simple Salesforce.com REST API client for Python'
-  summary: 'Simple Salesforce is a basic Salesforce.com REST API client. The goal is to provide a very low-level interface to the API, returning an ordered dictionary of the API JSON response.'
+  description: A very simple Salesforce.com REST API client for Python
+  summary: Simple Salesforce is a basic Salesforce.com REST API client. The goal is to provide a very low-level interface to the API, returning an ordered dictionary of the API JSON response.
   license: Apache-2.0
   license_family: Apache
   license_file: LICENSE.txt
