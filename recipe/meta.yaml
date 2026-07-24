@@ -26,12 +26,8 @@ requirements:
     - typing-extensions
     - zeep
     - pyjwt
+    - cryptography
     - more-itertools
-  run_constrained:
-    # test
-    - pytz >=2014.1.1
-    - responses >=0.5.1
-    - cryptography >4.0.0
 
 # > raise TypeError("auth_message must be a string")
 # E TypeError: auth_message must be a string
