@@ -1,5 +1,5 @@
 {% set name = "simple-salesforce" %}
-{% set version = "1.12.10" %}
+{% set version = "1.12.11" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: e3cb171c8369503843c994b0b6209c405c5678bb90be00f01ea9561466de49a2
+  sha256: f8ad4449144159668d3ee3e682c646da1d1689cec46106d4f014d39cdaf02c99
 
 build:
   number: 0
@@ -53,6 +53,7 @@ test:
   requires:
     - pip
     - pytest
+    - pytz
     - responses >=0.5.1
     - cryptography >4.0.0
 
